@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Benford's Law</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+<div class="grid-container">
+	<div class="grid-x grid-padding-x">
+		<div class="large-12 cell">
+			<h1>Challenge: Benford's Law</h1>
+		</div>
+	</div>
+
+	<div class="grid-x grid-padding-x">
+		<div class="large-8 medium-8 cell">
+			<hr>
+			<h5>Upload File:</h5>
+			<form action="/success" method="post" enctype="multipart/form-data">
+				<label>
+					<input type="file" name="file" class="button">
+				</label>
+				<input type="submit" value="Upload" class="button">
+			</form>
+			<!-- Grid Example -->
+
+			<br/>
+			<div class="primary callout">
+				<p>Container hostname is <strong>{{ hostname }}</strong> and its IP is <strong>{{ ip }}</strong>, db connection <strong>{{ db }}</strong></p>
+			</div>
+
+			{% if image %}
+			<hr>
+			<h5>Result:</h5>
+			<div class="callout success">
+				<h5>Graphical Representation</h5>
+				<p>Benford Result: {{ array }}</p>
+				<p><img src="/loadImage/{{ image }}" alt="Image"></p>
+			</div>
+			<div class="callout secondary">
+				<h5>Other Information</h5>
+				<p>File Upload Name: {{ name }}</p>
+				<p>Benford Image: {{ image }}</p>
+			</div>
+			<div class="callout alert">
+				<h5>File Parsing Errors</h5>
+				<p>{{ errors }}</p>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/what-input.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/foundation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/app.js') }}"></script>
+</body>
+</html>

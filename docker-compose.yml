@@ -1,0 +1,42 @@
+version: '3.0.15'
+services:
+  db:
+    container_name: benford-mongo
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: benford_db
+      MONGODB_DATA_DIR: /data/db
+      MONGODB_LOG_DIR: /dev/null
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_benford_data_container:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo benford-mongo:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - benford-cloud-network
+
+  flask:
+    container_name: benford-flask-docker
+    image: benford-flask-docker:latest
+    ports:
+      - 8080:8080
+    links:
+      - db
+    networks:
+      - benford-cloud-network
+
+volumes:
+  mongodb_benford_data_container:
+networks:
+  benford-cloud-network:
+    driver: bridge
+
+
+

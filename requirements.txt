@@ -1,0 +1,8 @@
+flask~=2.3.3
+Werkzeug~=2.3.7
+greenlet>=1.0
+numpy==1.25.2
+matplotlib==3.7.0
+requests==2.31.0
+pymongo==4.5.0
+flask_script==2.0.6
