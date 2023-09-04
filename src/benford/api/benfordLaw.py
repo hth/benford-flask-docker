@@ -70,18 +70,17 @@ def success():
                 # Insert to db
                 dbname = get_database()
                 collection = dbname['result']
-                new_id = collection.insert_one({
+                collection.insert_one({
                     "fileName": name,
                     "array": benford_array,
                     "imageLocation": image_location,
-                    "date": datetime.datetime.utcnow()}).inserted_id
+                    "date": datetime.datetime.utcnow()})
 
                 redirected = redirect(
                     url_for('index',
                             name=f.filename,
                             array=benford_array,
                             image=image_location.split('/')[3],
-                            id=new_id,
                             errors=incorrect_format),
                     code=302)
                 return redirected
