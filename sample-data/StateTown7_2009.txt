@@ -1,0 +1,3 @@
+State	Town	7_2009
+Alabama	Abbeville 	2930
+Alabama	Adamsville 	4782

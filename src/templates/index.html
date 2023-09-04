@@ -60,8 +60,9 @@
 					<table class="stack">
 						<thead>
 						<tr>
-							<th>File</th>
+							<th>Name</th>
 							<th>Result</th>
+							<th>S3</th>
 						</tr>
 						</thead>
 						<tbody id="history_result_id"></tbody>
@@ -89,6 +90,7 @@
                 table_data += '<tr>';
                 table_data += '<td>' + res[i].fileName + '</td>';
                 table_data += '<td class="text-wrap">' + res[i].array + '</a></td>'
+                table_data += '<td class="text-wrap">' + "<a href='" + res[i].imageLocation + "'>AWS</a></td>'"
                 table_data += '</tr>';
             }
 

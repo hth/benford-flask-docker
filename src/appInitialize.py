@@ -56,6 +56,3 @@ if __name__ == "__main__":
     appInitialize.run(host='0.0.0.0', port=8080, debug=True)
     appInitialize.config['DEBUG'] = True
 
-# Run code after flask application has started
-# https://stackoverflow.com/questions/27465533/run-code-after-flask-application-has-started
-# https://dev.to/alissonzampietro/the-amazing-journey-of-docker-compose-17lj
