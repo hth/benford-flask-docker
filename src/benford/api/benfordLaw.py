@@ -1,12 +1,12 @@
-from flask import Blueprint, render_template, request, send_from_directory, redirect, url_for
-from werkzeug import utils
-
 import csv
 import os
 import tempfile
-
 import matplotlib.pyplot as plt
 import numpy as np
+
+from flask import Blueprint, render_template, request, send_from_directory, redirect, url_for
+from werkzeug import utils
+from ..model.databaseInit import get_database
 
 # Location has to be in config file
 UPLOAD_FOLDER = '/tmp/upload'
@@ -62,12 +62,11 @@ def success():
 
                 image_location = replace_extension(filepath, 'png')
                 graph_bar(image_location, benford_array)
-                # Send to another page
-                # return render_template("uploadSuccess.html",
-                #                        name=f.filename,
-                #                        array=benford_array,
-                #                        image=image_location.split('/')[3],
-                #                        errors=incorrect_format)
+
+                dbname = get_database()
+                result = dbname['result']
+                new_id = result.insert_one({"fileName": name, "array": benford_array, "imageLocation": image_location}).inserted_id
+
                 redirected = redirect(
                     url_for('index',
                             name=f.filename,

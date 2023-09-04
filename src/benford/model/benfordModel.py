@@ -1,0 +1,4 @@
+class BenfordModel:
+    imageLocation = ""
+    arrayResult = []
+
