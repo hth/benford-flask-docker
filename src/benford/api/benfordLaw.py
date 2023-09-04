@@ -1,11 +1,14 @@
 import csv
 import os
 import tempfile
+import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+import pymongo
 
-from flask import Blueprint, render_template, request, send_from_directory, redirect, url_for
+from flask import Blueprint, render_template, request, send_from_directory, redirect, url_for, jsonify
 from werkzeug import utils
+from flask import Flask
 from ..model.databaseInit import get_database
 
 # Location has to be in config file
@@ -17,6 +20,7 @@ ALLOWED_EXTENSIONS = {'txt', 'csv', 'xls'}
 # 16 megabytes
 MAX_CONTENT_LENGTH = 16 * 1000 * 1000
 
+benfordLaw = Flask(__name__)
 benfordLaw_page = Blueprint('benfordLaw_page', __name__, template_folder='templates')
 csv.register_dialect('piper', delimiter='\t', quoting=csv.QUOTE_NONE)
 
@@ -57,21 +61,27 @@ def success():
                                 else:
                                     incorrect_format = incorrect_format + ',' + list_to_string(row)
                         except:
-                            print("Error line ".join(row) + " " + filepath)
+                            benfordLaw.logger.error("Error line ".join(row) + " " + filepath)
                             continue
 
                 image_location = replace_extension(filepath, 'png')
                 graph_bar(image_location, benford_array)
 
+                # Insert to db
                 dbname = get_database()
-                result = dbname['result']
-                new_id = result.insert_one({"fileName": name, "array": benford_array, "imageLocation": image_location}).inserted_id
+                collection = dbname['result']
+                new_id = collection.insert_one({
+                    "fileName": name,
+                    "array": benford_array,
+                    "imageLocation": image_location,
+                    "date": datetime.datetime.utcnow()}).inserted_id
 
                 redirected = redirect(
                     url_for('index',
                             name=f.filename,
                             array=benford_array,
                             image=image_location.split('/')[3],
+                            id=new_id,
                             errors=incorrect_format),
                     code=302)
                 return redirected
@@ -85,6 +95,16 @@ def success():
 @benfordLaw_page.route('/loadImage/<image>', methods=['GET'])
 def download(image):
     return send_from_directory(UPLOAD_FOLDER, image)
+
+
+@benfordLaw_page.route('/history', methods=['GET'])
+def load_history():
+    dbname = get_database()
+    collection = dbname['result']
+    item_details = collection\
+        .find({}, {'_id': 0, 'fileName': 1, 'array': 1, 'imageLocation': 1})\
+        .sort('date', pymongo.DESCENDING)
+    return jsonify(list(item_details))
 
 
 def allowed_file_type(name):

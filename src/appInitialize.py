@@ -24,14 +24,14 @@ def index():
             array = request.args.getlist('array')
             image = request.args.get('image')
             errors = request.args.get('errors')
-            appInitialize.logger.debug('Hostname: %s Ip: %s %s', host_name, host_ip, name)
+            appInitialize.logger.debug('Hostname: %s Ip: %s Filename: %s', host_name, host_ip, name)
             return render_template('index.html', hostname=host_name, ip=host_ip, db=get_database().client.is_primary, name=name, array=array, image=image, errors=errors)
         else:
             appInitialize.logger.debug('Hostname: %s Ip: %s', host_name, host_ip)
             return render_template('index.html', hostname=host_name, ip=host_ip, db=get_database().client.is_primary)
     except Exception as err:
         appInitialize.logger.error("Index Init %s", err)
-        return render_template('error.html', userFriendlyErrorMessage="Can not print the IP address of the container")
+        return render_template('error.html', userFriendlyErrorMessage="Cannot print the IP address of the container")
 
 
 dictConfig({
