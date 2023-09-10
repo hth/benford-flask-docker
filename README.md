@@ -14,7 +14,7 @@ Now visit http://localhost:8080
 Sample application does following things:
 1) Upload files
 2) Parses the uploaded file
-3) Auto corrects during parsing
+3) Autocorrects during parsing
 4) Generate results
 5) Saves result to MongoDB (Skipped on saving file to AWS S3)
 6) Shows the result and represent data in graphical form
